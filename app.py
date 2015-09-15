@@ -1,18 +1,20 @@
-from flask import Flask, render_template, redirect, url_for, request, session, flash
-from flask.ext.sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, redirect, url_for, request, session, flash, g
 from functools import wraps
-# import sqlite3
+from wtforms import Form, BooleanField, TextField, PasswordField, validators
+from python_mysql_connect2 import connect
+import hashlib
+from form import LoginForm
+from python_mysql_dbselect import select_user
+from python_mysql_dbinsert import insert_user
+from werkzeug.security import generate_password_hash, \
+     check_password_hash
 
 app = Flask(__name__)
 
 app.secret_key = '\xbf\xef\xda\xfe\xe8\xd8\x07tW\x97\x05("Gm\xd1$\x9b\xc9\xa4\xe7w\xc7\xf2'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 
-# create the sql alchemy object
-db = SQLAlchemy(app)
 
-from models import *
-
+# -------     Login Required     ------- #
 def login_required(f):
 	@wraps(f)
 	def wrap(*args, **kwargs):
@@ -23,28 +25,65 @@ def login_required(f):
 			return redirect(url_for('login'))
 	return wrap
 
+
+
+# -------     Index     ------- #
 @app.route('/')
 @login_required
 def home():
-	posts = db.session.query(BlogPost).all()
-	return render_template('index.html', posts = posts)
+	return render_template('index.html')
 
+
+
+# -------     Welcome     ------- #
 @app.route('/welcome')
 def welcome():
 	return render_template('welcome.html')
 
+
+
+# -------     Registration Class     ------- #
+
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+
+	if request.method == 'POST':
+		uname = request.form['username']
+		pword = generate_password_hash(request.form['password'])
+		emall = request.form['email']
+
+		insert_user(uname, pword, emall)
+		flash('Thanks for registering')
+		return redirect(url_for('welcome'))
+	return render_template('register.html')
+
+
+
+# -------     Login     ------- #
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 	error = None
-	if request.method == 'POST':
-		if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-			error = 'Invalid Credentials. Please try again.'
-		else:
-			session['logged_in'] = True
-			flash('You were logged in!')
-			return redirect(url_for('home'))
-	return render_template('login.html', error=error)
+	form = LoginForm(request.form)
 
+	if request.method == 'POST':
+		uname = request.form['username']
+		pword = generate_password_hash(request.form['password'])
+
+		if form.validate_on_submit():
+			userSelected = select_user(uname)
+			if request.form['username'] != userSelected[0] or request.form['password'] != userSelected[1]:
+				error = 'Invalid Credentials. Please try again.'
+			else:
+				session['logged_in'] = True
+				flash('You were logged in!')
+				return redirect(url_for('home'))
+		else:
+			render_template('login.html', form=form, error=error)
+	return render_template('login.html', form=form, error=error)
+
+
+
+# -------     Logout     ------- #
 @app.route('/logout')
 @login_required
 def logout():
@@ -52,8 +91,14 @@ def logout():
 	flash('You were just logged out!')
 	return redirect(url_for('welcome'))
 
-# def connect_db():
-	# return sqlite3.connect(app.database)
+
+
+# -------     Error Handler     ------- #
+@app.errorhandler(404)
+def page_not_found(e):
+	return render_template('404.html')
+
+
 
 if __name__ == '__main__':
 	app.run(debug = True)
