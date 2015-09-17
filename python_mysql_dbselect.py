@@ -7,25 +7,23 @@ def select_user(name):
         dbconfig = read_db_config()
         conn = MySQLConnection(**dbconfig)
         cursor = conn.cursor()
-        query = ("SELECT username, password FROM users WHERE username = %s")
+        #query = ("SELECT username, password FROM users")
+        query = ("SELECT * FROM users WHERE username = %s")
 
+        #cursor.execute(query)
         cursor.execute(query, (name, ))
+        rows = cursor.fetchall()
+        #print rows[0]
 
-        information = 
-
-        for (username, password) in cursor:
-            return ("{}, {}".format(username, password))
-        
-        # cursor.close()
-        # cnx.close()
-
-        # while row is not None:
-        #     print(row)
-        #     row = cursor.fetchone()
- 
+        for row in rows:
+            #print(row[2]) #0 is id
+            x = ("{}, {}".format(row[1],row[2]))
+            #print x
+            
     except Error as e:
         print(e)
  
     finally:
         cursor.close()
         conn.close()
+        return rows[0]

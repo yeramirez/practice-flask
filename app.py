@@ -6,8 +6,8 @@ import hashlib
 from form import LoginForm
 from python_mysql_dbselect import select_user
 from python_mysql_dbinsert import insert_user
-from werkzeug.security import generate_password_hash, \
-     check_password_hash
+import hashlib
+import xml.etree.ElementTree as ET
 
 app = Flask(__name__)
 
@@ -31,6 +31,8 @@ def login_required(f):
 @app.route('/')
 @login_required
 def home():
+	# tree = ET.parse('country_data.xml')
+	# root = tree.getroot()
 	return render_template('index.html')
 
 
@@ -49,7 +51,7 @@ def register():
 
 	if request.method == 'POST':
 		uname = request.form['username']
-		pword = generate_password_hash(request.form['password'])
+		pword = hashlib.md5(request.form['password']).hexdigest()
 		emall = request.form['email']
 
 		insert_user(uname, pword, emall)
@@ -67,16 +69,25 @@ def login():
 
 	if request.method == 'POST':
 		uname = request.form['username']
-		pword = generate_password_hash(request.form['password'])
+		pword = request.form['password']
 
 		if form.validate_on_submit():
+
 			userSelected = select_user(uname)
-			if request.form['username'] != userSelected[0] or request.form['password'] != userSelected[1]:
-				error = 'Invalid Credentials. Please try again.'
-			else:
+			newPword = hashlib.md5(pword).hexdigest()
+
+			userInfo = []
+			
+			for user in userSelected:
+				userInfo.append(str(user))
+
+			if str(uname) == userInfo[1] and str(newPword) == userInfo[2]:
 				session['logged_in'] = True
 				flash('You were logged in!')
 				return redirect(url_for('home'))
+			else:
+				error = 'Invalid Credentials. Please try again.'
+				
 		else:
 			render_template('login.html', form=form, error=error)
 	return render_template('login.html', form=form, error=error)
