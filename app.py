@@ -3,11 +3,14 @@ from functools import wraps
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
 from python_mysql_connect2 import connect
 import hashlib
-from form import LoginForm
+from form import LoginForm, GenderForm
 from python_mysql_dbselect import select_user
 from python_mysql_dbinsert import insert_user
 import hashlib
 import xml.etree.ElementTree as ET
+import urllib2
+import xmltodict
+from xml.etree import ElementTree as etree
 
 app = Flask(__name__)
 
@@ -28,12 +31,35 @@ def login_required(f):
 
 
 # -------     Index     ------- #
-@app.route('/')
-@login_required
+@app.route('/', methods=['GET', 'POST'])
+#@login_required
 def home():
-	# tree = ET.parse('country_data.xml')
-	# root = tree.getroot()
-	return render_template('index.html')
+	form = GenderForm(request.form)
+	api_key = 'ya520550'
+	url = 'http://www.behindthename.com/api/random.php?usage=ita&gender='
+	space_name = '&key='
+	data = None
+	if request.method == 'POST':
+		if request.form['gender'] == 'female':
+			gender = 'f'
+			htmlUrl = url + gender + space_name + api_key
+			print htmlUrl
+			file = urllib2.urlopen(htmlUrl)
+			data = file.read()
+			file.close()
+    		data = xmltodict.parse(data)
+    		print data["response"]["names"]["name"][0]
+
+    	else:
+			gender = 'm'
+			htmlUrl = url + gender + space_name + api_key
+			file = urllib2.urlopen(htmlUrl)
+			data = file.read()
+			file.close()
+			data = xmltodict.parse(data)
+			print data["response"]["names"]["name"][0]
+			return render_template('index.html', form=form,data=data)
+	return render_template('index.html', form=form, data=data)
 
 
 
@@ -77,7 +103,7 @@ def login():
 			newPword = hashlib.md5(pword).hexdigest()
 
 			userInfo = []
-			
+
 			for user in userSelected:
 				userInfo.append(str(user))
 

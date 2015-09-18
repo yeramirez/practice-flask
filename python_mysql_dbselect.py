@@ -13,12 +13,12 @@ def select_user(name):
         #cursor.execute(query)
         cursor.execute(query, (name, ))
         rows = cursor.fetchall()
-        #print rows[0]
 
-        for row in rows:
-            #print(row[2]) #0 is id
-            x = ("{}, {}".format(row[1],row[2]))
-            #print x
+        if rows is not None:
+            for row in rows:
+                x = ("{}, {}".format(row[1],row[2]))
+        else:
+            print Error
             
     except Error as e:
         print(e)

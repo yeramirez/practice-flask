@@ -2,10 +2,26 @@
 {% block content %}
 
 <div class="container">
-	<h1>Welcome, this is your account!</h1>
-	<p>Click <a href="/logout">here</a> to logout.</p>
+	<form role="form" method="post" action="">
+		<h1>Search for a Baby Name</h1>
+		<div class="form-group col-lg-2 control-label">
+		  <div class="col-lg-10">
+		  	<h2>Gender</h2>
+		    <div class="radio">
+		      {{ form.gender }}
+		    </div>
+		    <button class="btn btn-sm btn-success" type="submit">Submit</button><br><br>
+		  </div>
+		</div>
+	</form>
+	<div>
+    	{% if form.data %}
+            {% for data in form.data %}
+              {{ data }}
+        	{% endfor %}
+        {% endif %}
+    </div>
 </div>
-
 
 
 {% endblock %}
