@@ -30,10 +30,22 @@ def login_required(f):
 
 
 
-# -------     Index     ------- #
+# -------     Home Route     ------- #
 @app.route('/', methods=['GET', 'POST'])
 #@login_required
 def home():
+	form = GenderForm(request.form)
+	api_key = 'ya520550'
+	url = 'http://www.behindthename.com/api/random.php?usage=ita&gender='
+	space_name = '&key='
+	
+	return render_template('index.html', form=form)
+
+
+
+# -------     Name Route     ------- #
+@app.route('/name', methods=['GET', 'POST'])
+def name():
 	form = GenderForm(request.form)
 	api_key = 'ya520550'
 	url = 'http://www.behindthename.com/api/random.php?usage=ita&gender='
@@ -43,24 +55,20 @@ def home():
 		if request.form['gender'] == 'female':
 			gender = 'f'
 			htmlUrl = url + gender + space_name + api_key
-			print htmlUrl
 			file = urllib2.urlopen(htmlUrl)
 			data = file.read()
 			file.close()
-    		data = xmltodict.parse(data)
-    		print data["response"]["names"]["name"][0]
-
-    	else:
+			data = xmltodict.parse(data)
+			name_info = data["response"]["names"]["name"]
+		else:
 			gender = 'm'
 			htmlUrl = url + gender + space_name + api_key
 			file = urllib2.urlopen(htmlUrl)
 			data = file.read()
 			file.close()
 			data = xmltodict.parse(data)
-			print data["response"]["names"]["name"][0]
-			return render_template('index.html', form=form,data=data)
-	return render_template('index.html', form=form, data=data)
-
+			name_info = data["response"]["names"]["name"]
+	return render_template('index.html', form=form, names=name_info)
 
 
 # -------     Welcome     ------- #
@@ -71,7 +79,6 @@ def welcome():
 
 
 # -------     Registration Class     ------- #
-
 @app.route('/register', methods=['GET', 'POST'])
 def register():
 

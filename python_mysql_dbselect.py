@@ -27,3 +27,4 @@ def select_user(name):
         cursor.close()
         conn.close()
         return rows[0]
+        print rows[0]
