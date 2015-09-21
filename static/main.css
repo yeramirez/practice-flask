@@ -1,6 +1,8 @@
 .navbar { border-radius: 0px; font-family: 'Questrial', 'sans-serif'; }
 
-body { font-family: 'Questrial', 'sans-serif'; }
+body {
+	font-family: 'Questrial', 'sans-serif';
+}
 
 .e1 { margin-top: -15px; height: 50px; }
 
@@ -12,3 +14,32 @@ h1 { text-align: center;}
 
 .alert { font-family: 'Questrial', 'sans-serif';}
 
+.welcome {
+	background-color: #EDF2F4;
+	padding: 20px;
+	margin-top: -22px;
+	height: 400px;
+}
+
+
+.st0{fill:#FF4136;}
+.st1{fill:#FF4136;stroke:#FF4136;stroke-miterlimit:10;}
+.st2{fill:#424242;}
+.st4{fill:#424242;}
+
+.word {
+	height: 125%;
+}
+
+.elephant1 {
+	height: 200px;
+}
+
+section {
+	text-align: center;
+	margin: 25px auto;
+}
+
+.col-md-4 {
+	text-align: center;
+}

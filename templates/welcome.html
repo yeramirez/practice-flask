@@ -1,9 +1,23 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Welcome</h1>
-
-<!-- <img class="e2" src="/static/img/elephant1.svg"> -->
-<p>click <a href='/'>here</a> to go home.</p>
+<div class="welcome">
+	<section>
+		<img class="elephant1" src="/static/img/elephant1.svg">
+		<br><br>
+		<a href="{{ url_for('home') }}" class="btn btn-danger"><span class="glyphicon glyphicon glyphicon-random" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Random</a>
+		<a href="{{ url_for('home') }}" class="btn btn-danger"><span class="glyphicon glyphicon glyphicon-search" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;Search</a>
+	</section>
+</div>
+<div class="col-md-6">
+	<h3>Random Generator</h3>
+	<p>This random generator let's you choose a name based on gender and by the luck of the draw. Forget about being overwhelmed by a HUGE book filled with names, with the random search, you'll be able to find a name that is unforgettable! Finding a name for your beautiful bundle of joy has never been so easy. So go ahead and check it out. Generate beautiful names by clicking <a href="{{ url_for('home') }}">here</a>.</p>
+</div>
+<div class="col-md-6">
+	<h3>Search Names</h3>
+	<p>This search feature let's you find out information about any name that you enter. Find short and fun facts about the name that you enter. Have fun and search as many as you want. This feature will give you access of what's behind the name! Search for names by clicking <a href="{{ url_for('home') }}">here</a>.
+	<br><br>
+	Disclosure: You must sign up to access this feature.</p>
+</div>
 
 {% endblock %}

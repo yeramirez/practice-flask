@@ -93,6 +93,20 @@ def register():
 	return render_template('register.html')
 
 
+# -------     Search     ------- #
+@app.route('/search', methods=['GET', 'POST'])
+@login_required
+def search():
+	form = SearchForm(request.form)
+	print "hello"
+	if request.method == 'POST':
+		search_name = request.form['search']
+		print search_name
+		#return redirect(url_for('welcome'))
+		flash('Thank you!')
+	return render_template('index.html', form=form)
+
+
 
 # -------     Login     ------- #
 @app.route('/login', methods=['GET', 'POST'])
