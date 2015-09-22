@@ -22,9 +22,13 @@
 	<div class="panel-body">
 		{% if search is defined %}
 		<h3>Search Result:</h3>
-			<strong class="text-primary">
-				{{ search }}
-			</strong>
+			
+				{% for result in search %}
+					<p><strong class="text-primary">
+					{{ result }}
+					</strong></p>
+				{% endfor %}
+			
 		{% endif %}
 	</div>
 </div>

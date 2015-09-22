@@ -65,12 +65,19 @@ def result():
 		data = file.read()
 		file.close()
 		data = xmltodict.parse(data)
-		result = data["response"]["name_detail"]["name"]
-		result += data["response"]["name_detail"]["gender"]
-		for info in data["response"]:
-			print info
-		# print data["response"]["name_detail"]["name"]
-		# print data["response"]["name_detail"]["gender"]
+		#result = data["response"]["name_detail"]["name"]
+		#result += data["response"]["name_detail"]["gender"]
+		result = []
+
+		for z in data['response']['name_detail']:
+			print z
+
+		for i in data['response']['name_detail']['usages']['usage']:
+			result.append(i['usage_code'])
+			result.append(i['usage_full'])
+			result.append(i['usage_gender'])
+
+
 	else:
 		print "Did not go through"
 	return render_template('search.html', form=form, search=result)
