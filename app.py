@@ -3,7 +3,7 @@ from functools import wraps
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
 from python_mysql_connect2 import connect
 import hashlib
-from form import LoginForm, GenderForm
+from form import LoginForm, GenderForm, SearchForm
 from python_mysql_dbselect import select_user
 from python_mysql_dbinsert import insert_user
 import hashlib
@@ -35,12 +35,45 @@ def login_required(f):
 #@login_required
 def home():
 	form = GenderForm(request.form)
-	api_key = 'ya520550'
-	url = 'http://www.behindthename.com/api/random.php?usage=ita&gender='
-	space_name = '&key='
-	
 	return render_template('index.html', form=form)
 
+
+
+# -------     Search     ------- #
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+	form = SearchForm(request.form)
+	return render_template('search.html', form=form)
+
+
+# -------     Search Result    ------- #
+@app.route('/result', methods=['GET', 'POST'])
+@login_required
+def result():
+	form = SearchForm(request.form)
+	url_search = 'http://www.behindthename.com/api/lookup.php?name='
+	search_name = request.form['search']
+	space_name = '&key='
+	api_key = 'ya520550'
+	print "hello, from the console"
+	data = None
+	result = None
+
+	if request.method == 'POST':
+		search_url = url_search + search_name + space_name + api_key
+		file = urllib2.urlopen(search_url)
+		data = file.read()
+		file.close()
+		data = xmltodict.parse(data)
+		result = data["response"]["name_detail"]["name"]
+		result += data["response"]["name_detail"]["gender"]
+		for info in data["response"]:
+			print info
+		# print data["response"]["name_detail"]["name"]
+		# print data["response"]["name_detail"]["gender"]
+	else:
+		print "Did not go through"
+	return render_template('search.html', form=form, search=result)
 
 
 # -------     Name Route     ------- #
@@ -93,19 +126,13 @@ def register():
 	return render_template('register.html')
 
 
-# -------     Search     ------- #
-@app.route('/search', methods=['GET', 'POST'])
-@login_required
-def search():
-	form = SearchForm(request.form)
-	print "hello"
-	if request.method == 'POST':
-		search_name = request.form['search']
-		print search_name
-		#return redirect(url_for('welcome'))
-		flash('Thank you!')
-	return render_template('index.html', form=form)
 
+# -------     List (Insert)     ------- #
+# @app.route('/insert', methods=['GET', 'POST'])
+# @login_required
+# def add_to_list():
+# 	if request.method = 'POST':
+# 		bbname = request.form['']
 
 
 # -------     Login     ------- #

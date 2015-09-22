@@ -1,5 +1,5 @@
 from flask_wtf import Form
-from wtforms import TextField, PasswordField, RadioField, TextAreaField
+from wtforms import TextField, PasswordField, RadioField
 from wtforms.validators import DataRequired
 
 class LoginForm(Form):
@@ -10,4 +10,4 @@ class GenderForm(Form):
 	gender = RadioField('Gender', choices=[('female','Female'),('male','Male')])
 
 class SearchForm(Form):
-	search = TextAreaField('Search', validators=[DataRequired()])
+	search = TextField('Search a Name', validators=[DataRequired()])
