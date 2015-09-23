@@ -80,7 +80,6 @@ def result():
 			except:
 				try:
 					for z in data['response']['name_detail']:
-						print z['name']
 						result_name = z['name']
 						result_usage = z['usages']['usage']
 						result.append(result_name)
@@ -90,15 +89,26 @@ def result():
 						usage_full = i['usage_full']
 						usages.append(usage_full)
 				except:
-					result.append(data['response']['name_detail']['name'])
-					a = 0
-					us_len = len(data['response']['name_detail']['usages']['usage'])
-					while (a < us_len):
-						print 'running the OTHER'
-						print a
-						hello = data['response']['name_detail']['usages']['usage'][a]['usage_full']
-						usages.append(hello)
-						a += 1
+					try:
+						print 'running ellen'
+						for z in data['response']['name_detail']:
+							result_number = z['number']
+							result_usage = z['usages']['usage']['usage_full']
+							result.append(result_number)
+
+							usages.append(result_usage)
+							
+					except:
+						try:
+							result.append(data['response']['name_detail']['name'])
+							a = 0
+							us_len = len(data['response']['name_detail']['usages']['usage'])
+							while (a < us_len):
+								hello = data['response']['name_detail']['usages']['usage'][a]['usage_full']
+								usages.append(hello)
+								a += 1
+						except:
+							print 'nothing'
 	else:
 		print "Did not go through"
 	return render_template('search.html', form=form, search=result, usage=usages)
