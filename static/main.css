@@ -52,5 +52,10 @@ ul {list-style-type: none;}
 
 form.navbar-form {text-align: center;}
 
+html > body > div > p {
+	padding: 20px;
+	font-weight: bold;
+	font-size: 1.1em;
+}
 
 

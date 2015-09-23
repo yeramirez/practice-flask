@@ -164,14 +164,6 @@ def register():
 
 
 
-# -------     List (Insert)     ------- #
-# @app.route('/insert', methods=['GET', 'POST'])
-# @login_required
-# def add_to_list():
-# 	if request.method = 'POST':
-# 		bbname = request.form['']
-
-
 # -------     Login     ------- #
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -195,7 +187,7 @@ def login():
 			if str(uname) == userInfo[1] and str(newPword) == userInfo[2]:
 				session['logged_in'] = True
 				flash('You were logged in!')
-				return redirect(url_for('home'))
+				return redirect(url_for('welcome'))
 			else:
 				error = 'Invalid Credentials. Please try again.'
 				
