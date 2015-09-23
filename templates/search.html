@@ -8,10 +8,11 @@
 </p>
 <p>You need to login first!</p>
 {% else %}
-<div class="container">
-	<form class="navbar-form navbar-left" role="search" method="POST" action="/result">
+<div class="container form-here">
+	<h3>Go ahead and search!</h3><br>
+	<form class="navbar-form" role="search" method="POST" action="/result">
 		<div class="form-group">
-			{{ form.search(class="form-control") }}
+			{{ form.search(class="form-control", placeholder="Enter a name") }}
 		</div>
 		<button type="submit" class="btn btn-default">Submit</button>
 	</form>
@@ -24,13 +25,13 @@
 		<h3>Search Result:</h3>
 				<h6>Name and Gender:</h6>
 				{% for result in search %}
-					<p><strong class="text-primary">
+					<p><strong class="text-info">
 					{{ result }}
 					</strong></p>
 				{% endfor %}
 				<h6>Background:</h6>
 				{% for u in usage %}
-					<p><strong class="text-primary">
+					<p><strong class="text-info">
 					{{ u }}
 					</strong></p>
 				{% endfor %}

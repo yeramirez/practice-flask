@@ -7,7 +7,6 @@ from form import LoginForm, GenderForm, SearchForm
 from python_mysql_dbselect import select_user
 from python_mysql_dbinsert import insert_user
 import hashlib
-import xml.etree.ElementTree as ET
 import urllib2
 import xmltodict
 import unicodedata

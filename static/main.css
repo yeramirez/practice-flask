@@ -15,7 +15,7 @@ h3 { text-align: center;}
 .alert { font-family: 'Questrial', 'sans-serif';}
 
 .welcome {
-	background-color: #EDF2F4;
+	background-color: #f9f9f9;
 	padding: 20px;
 	margin-top: -22px;
 	height: 400px;
@@ -27,23 +27,30 @@ h3 { text-align: center;}
 .st2{fill:#424242;}
 .st4{fill:#424242;}
 
-.word {
-	height: 125%;
-}
+.word {height: 125%;}
 
-.elephant1 {
-	height: 200px;
-}
+.elephant1 {height: 200px;}
 
 section {
 	text-align: center;
 	margin: 25px auto;
 }
 
-.col-md-4 {
-	text-align: center;
+.col-md-4 {text-align: center;}
+div.list-group.col-lg-12 {text-align: center;}
+
+.col-md-6 {padding: 5%;}
+
+ul {list-style-type: none;}
+
+.form-here {
+	width: 100%;
+	padding: 6%;
+	margin-top: -25px;
+	background-color: #f9f9f9;
 }
 
-ul {
-	list-style-type: none;
-}
+form.navbar-form {text-align: center;}
+
+
+

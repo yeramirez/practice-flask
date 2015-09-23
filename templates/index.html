@@ -16,14 +16,14 @@
 	</form>
 	<br>
 		{% if names is defined %}
-		<div class="list-group col-lg-12 panel panel-default">
-			<div class="panel-body">
+		<div class="list-group col-lg-12">
+			<div>
 			<h3>Random Name:</h3>
+			<h4 class="text-primary">
 				{% for name in names %}
-				<strong class="text-primary">
 					{{ name }}
-				</strong>
 				{% endfor %}
+				</h4>
 			</div>
 		</div>
 		{% endif %}
