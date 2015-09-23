@@ -11,7 +11,6 @@ import xml.etree.ElementTree as ET
 import urllib2
 import xmltodict
 import unicodedata
-from xml.etree import ElementTree as etree
 
 app = Flask(__name__)
 
@@ -68,40 +67,38 @@ def result():
 		data = xmltodict.parse(data)
 		result = []
 		usages = []
-		length = len(data['response']['name_detail'])
 
 		try:
-			result.append(data['response']['name_detail']['name'])
-			result.append(data['response']['name_detail']['gender'])
-			usages.append(data['response']['name_detail']['usages']['usage']['usage_full'])
+			if data['response']['error_code']:
+				flash('Sorry, no information!')
 		except:
-			for z in data['response']['name_detail']:
-				result_name = z['name']
-				result_usage = z['usages']['usage']
+			try:
+				hello = data['response']['name_detail']['name']
+				result.append(hello)
+				result.append(data['response']['name_detail']['gender'])
+				usages.append(data['response']['name_detail']['usages']['usage']['usage_full'])
+			except:
+				try:
+					for z in data['response']['name_detail']:
+						print z['name']
+						result_name = z['name']
+						result_usage = z['usages']['usage']
+						result.append(result_name)
 
-				result.append(result_name)
-
-			usages = []
-			for i in result_usage:
-				usage_full = i['usage_full']
-				usages.append(usage_full)
-		# else:
-		# 	result.append(data['response']['name_detail']['name'])
-		# 	a = 0
-		# 	us_len = len(data['response']['name_detail']['usages']['usage'])
-		# 	while (a < us_len):
-		# 		print 'running the OTHER'
-		# 		print a
-		# 		hello = data['response']['name_detail']['usages']['usage'][a]['usage_full']
-		# 		usages.append(hello)
-		# 		a += 1
-
-		# else:
-		# 	print 'nothing'
-
-		# print 'this is usages'
-		# print usages
-
+					usages = []
+					for i in result_usage:
+						usage_full = i['usage_full']
+						usages.append(usage_full)
+				except:
+					result.append(data['response']['name_detail']['name'])
+					a = 0
+					us_len = len(data['response']['name_detail']['usages']['usage'])
+					while (a < us_len):
+						print 'running the OTHER'
+						print a
+						hello = data['response']['name_detail']['usages']['usage'][a]['usage_full']
+						usages.append(hello)
+						a += 1
 	else:
 		print "Did not go through"
 	return render_template('search.html', form=form, search=result, usage=usages)
